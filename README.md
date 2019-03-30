@@ -1,6 +1,8 @@
 # ublox.js
 ## Installation
+```shell
 npm install ublox.js
+```
 
 ## Usage
 ```node
