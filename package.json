@@ -1,6 +1,12 @@
 {
   "dependencies": {
-    "binary-parser": "^1.3.2",
     "serialport": "^7.1.4"
-  }
+  },
+  "name": "ublox.js",
+  "version": "1.0.0",
+  "description": "node.js driver for ublox gps",
+  "main": "ublox.js",
+  "repository": "https://github.com/Huibean/ublox.js.git",
+  "author": "Huibean <huibean.luo@gmail.com>",
+  "license": "MIT"
 }
