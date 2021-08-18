@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "serialport": "^7.1.4"
+    "serialport": "^9.2.0"
   },
   "name": "ublox.js",
   "version": "1.0.0",
