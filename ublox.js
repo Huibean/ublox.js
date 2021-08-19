@@ -144,9 +144,6 @@ Messages[CLASS_NAV] = []
 Messages[CLASS_NAV][MSG_NAV_CLOCK] = new MessageParser([[0, 'U4', "iTOW"], [4, 'I4', 'clkB'], [8, 'I4', 'clkD'], [12, 'U4', 'tAcc'], [16, 'U4', 'fAcc']])
 Messages[CLASS_NAV][MSG_NAV_SVIN] = new MessageParser([[0, 'U1', "version"], [1, 'U1[3]', 'reserved1'], [4, 'U4', 'iTOW'], [8, 'U4', 'dur'], [12, 'I4', 'meanX'], [16, 'I4', 'meanY'], [20, 'I4', 'meanZ'], [24, 'I1', 'meanXHP'], [25, 'I1', 'meanYHP'], [26, 'I1', 'meanZHP'], [27, 'U1', 'reserved2'], [28, 'U4', 'meanAcc'], [32, 'U4', 'obs'], [36, 'U1', 'valid'], [37, 'U1', 'active'], [38, 'U1[2]', 'reserved3']])
 
-
-const MessageLength = new Parser().uint16("len")
-
 let ParseManager = class {
   constructor() {
     this.step = 0
@@ -158,11 +155,12 @@ let ParseManager = class {
   }
 
   continue() {
+    console.log("continue", this.step)
     this.step ++;
   }
 
   reset() {
-    // console.log("reset", this.step)
+    console.log("reset", this.step)
     this.step = 0
     this.classId = null
     this.msgId = null
@@ -181,15 +179,12 @@ module.exports = class {
     let init = false;
 
     port.on('open', function() {
-      console.log("port in opening...")
+      console.log("port is opening...")
       // open logic
     })
 
     port.on('data', (data) => {
       this.handleReceive(data)
-      init = true
-      if (!init) {
-      }
     })
 
     port.on('error', function(err) {
@@ -201,18 +196,24 @@ module.exports = class {
 
   handleMessage(classId, msgId, payload) {
     if (Messages[classId] && Messages[classId][msgId]) {
-
       let msg = Messages[classId][msgId].parse(payload)
       console.log(msg)
+    } else {
+      console.log({
+        classId,
+        msgId,
+        payload
+      })
     }
   }
 
   handleReceive(buffer) {
     let parseManager = new ParseManager();
-    // console.log("buffer.length: ", buffer.length)
+    console.log("buffer.length: ", buffer.length)
     for (var i = 0, len = buffer.length; i < len; i++) {
       let data = buffer[i];
-      // console.log("data:", data.toString())
+      console.log("data:", data.toString())
+      console.log("parseManager.step:", parseManager.step)
       switch (parseManager.step) {
         case 0:
           if (data === HEADER1) {
